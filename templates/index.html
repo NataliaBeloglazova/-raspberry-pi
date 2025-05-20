@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Управление светодиодной лентой</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .status {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .control {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .nutrition {
+            background-color: {% if nutrition == '1' %}lightgreen{% else %}lightcoral{% endif %};
+        }
+        .color-btn {
+            color: white;
+            border: none;
+        }
+        #btnR {
+            background-color: {% if buttons.R == '1' %}red{% else %}darkred{% endif %};
+        }
+        #btnG {
+            background-color: {% if buttons.G == '1' %}green{% else %}darkgreen{% endif %};
+        }
+        #btnB {
+            background-color: {% if buttons.B == '1' %}blue{% else %}darkblue{% endif %};
+        }
+        .light-indicator {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Управление светодиодной лентой</h1>
+    
+    <div class="status">
+        <h2>Текущее состояние:</h2>
+        <p>Питание: {% if nutrition == '1' %}ВКЛ{% else %}ВЫКЛ{% endif %}</p>
+        <p>Уровень освещенности: {{ light_level }}</p>
+        <p>Цвета: 
+            {% if colors.red == '1' %}Красный {% endif %}
+            {% if colors.green == '1' %}Зеленый {% endif %}
+            {% if colors.blue == '1' %}Голубой {% endif %}
+            {% if colors.red == '0' and colors.green == '0' and colors.blue == '0' %}Выключены{% endif %}
+        </p>
+    </div>
+    
+    <div class="control">
+        <form method="post">
+            <button type="submit" name="nutrition" class="nutrition">
+                {% if nutrition == '1' %}Выключить питание{% else %}Включить питание{% endif %}
+            </button>
+            
+            <button type="submit" name="R" id="btnR" class="color-btn">
+                {% if buttons.R == '1' %}Выключить красный{% else %}Включить красный{% endif %}
+            </button>
+            
+            <button type="submit" name="G" id="btnG" class="color-btn">
+                {% if buttons.G == '1' %}Выключить зеленый{% else %}Включить зеленый{% endif %}
+            </button>
+            
+            <button type="submit" name="B" id="btnB" class="color-btn">
+                {% if buttons.B == '1' %}Выключить голубой{% else %}Включить голубой{% endif %}
+            </button>
+        </form>
+    </div>
+    
+    <div class="light-indicator">
+        <h3>Автоматическое управление:</h3>
+        <p>При уровне освещенности ниже 50 лента включится белым цветом</p>
+    </div>
+</body>
+</html>

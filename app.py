@@ -35,3 +35,27 @@ def auto_light_control():
                     write_file('green.txt', '0')
                     write_file('blue.txt', '0')
         time.sleep(1)
+
+# Запускаем поток для автоматического управления
+thread = threading.Thread(target=auto_light_control)
+thread.daemon = True
+thread.start()
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        # Обработка кнопки питания
+        if 'nutrition' in request.form:
+            current = read_file('nutrition.txt')
+            new_value = '0' if current == '1' else '1'
+            write_file('nutrition.txt', new_value)
+        
+        # Обработка цветовых кнопок
+        for color in ['R', 'G', 'B']:
+            if color in request.form:
+                current = read_file(f'button{color}.txt')
+                new_value = '0' if current == '1' else '1'
+                write_file(f'button{color}.txt', new_value)
+                # Если питание включено, меняем состояние цвета
+                if read_file('nutrition.txt') == '1':
+                    write_file(f'{color.lower()}.txt', new_value)

@@ -59,3 +59,34 @@ def index():
                 # Если питание включено, меняем состояние цвета
                 if read_file('nutrition.txt') == '1':
                     write_file(f'{color.lower()}.txt', new_value)
+
+# Чтение текущих состояний
+    nutrition = read_file('nutrition.txt')
+    light_level = read_file('light.txt')
+    colors = {
+        'red': read_file('red.txt'),
+        'green': read_file('green.txt'),
+        'blue': read_file('blue.txt')
+    }
+    buttons = {
+        'R': read_file('buttonR.txt'),
+        'G': read_file('buttonG.txt'),
+        'B': read_file('buttonB.txt')
+    }
+    
+    return render_template('index.html', 
+                         nutrition=nutrition,
+                         light_level=light_level,
+                         colors=colors,
+                         buttons=buttons)
+
+if __name__ == '__main__':
+    # Инициализация файлов, если они не существуют
+    for file in ['light.txt', 'buttonR.txt', 'buttonG.txt', 'buttonB.txt', 
+                 'nutrition.txt', 'red.txt', 'green.txt', 'blue.txt']:
+        try:
+            open(file, 'r').close()
+        except:
+            write_file(file, '0')
+    
+    app.run(host='0.0.0.0', port=8080)
